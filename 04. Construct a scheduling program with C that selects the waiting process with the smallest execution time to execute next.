@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Process {
+    int pid;
+    int burst_time;
+    int waiting_time;
+    int turnaround_time;
+};
+int cmp(const void *a, const void *b) {
+    struct Process *p1 = (struct Process *)a;
+    struct Process *p2 = (struct Process *)b;
+    return p1->burst_time - p2->burst_time;
+}
+void SJF(struct Process proc[], int n) {
+    int i;
+    int total_waiting_time = 0;
+    int total_turnaround_time = 0;
+    int current_time = 0;
+    qsort(proc, n, sizeof(struct Process), cmp);
+    printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (i = 0; i < n; i++) 
+    {
+        current_time += proc[i].burst_time;
+        proc[i].waiting_time = current_time;
+        proc[i].turnaround_time = proc[i].waiting_time;
+        total_waiting_time += proc[i].waiting_time;
+        total_turnaround_time += proc[i].turnaround_time;
+        printf("%d\t\t%d\t\t%d\t\t%d\n", proc[i].pid, proc[i].burst_time, proc[i].waiting_time, proc[i].turnaround_time);
+    }
+    printf("\nAverage Waiting Time: %f\n", (float)total_waiting_time / n);
+    printf("Average Turnaround Time: %f\n", (float)total_turnaround_time / n);
+}
+int main() 
+{
+    int i, n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+    struct Process proc[n];
+    for (i = 0; i < n; i++) {
+        printf("Enter the burst time of process %d: ", i + 1);
+        scanf("%d", &proc[i].burst_time);
+        proc[i].pid = i + 1;
+}
+    SJF(proc, n);
+    return 0;
+}
