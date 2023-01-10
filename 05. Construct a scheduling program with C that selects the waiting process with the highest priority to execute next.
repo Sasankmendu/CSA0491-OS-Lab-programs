@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_PROCESSES 5
+struct Process
+{
+    int pid;
+    int priority;
+    int burst_time;
+};
+int select_highest_priority(struct Process processes[], int n) 
+{
+    int highest_priority = 0;
+    int selected_process = 0;
+    for (int i = 0; i < n; i++) 
+    {
+        if (processes[i].priority > highest_priority) 
+        {
+            highest_priority = processes[i].priority;
+            selected_process = i;
+        }
+    }
+    return selected_process;
+}
+int main() 
+{
+    struct Process processes[MAX_PROCESSES];
+    for (int i = 0; i < MAX_PROCESSES; i++)
+    {
+        processes[i].pid = i;
+        printf("Enter priority for process %d: ", i);
+        scanf("%d", &processes[i].priority);
+        printf("Enter burst time for process %d: ", i);
+        scanf("%d", &processes[i].burst_time);
+    }
+    int selected_process = select_highest_priority(processes, MAX_PROCESSES);
+    printf("Selected process: %d with priority %d and burst time %d\n",
+        processes[selected_process].pid,
+        processes[selected_process].priority,
+        processes[selected_process].burst_time);
+    return 0;
+}
