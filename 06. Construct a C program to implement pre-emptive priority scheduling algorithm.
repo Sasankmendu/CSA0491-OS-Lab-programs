@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct Process 
+{
+   int pid; 
+   int bt;  
+   int priority;
+};
+int highestPriorityProcess(struct Process proc[], int n) 
+{
+   int i, max_priority_idx = 0;
+   for(i = 1; i < n; i++) 
+   {
+      if(proc[i].priority > proc[max_priority_idx].priority) 
+      {
+         max_priority_idx = i;
+      }
+   }
+   return max_priority_idx;
+}
+void preEmptivePriorityScheduling(struct Process proc[], int n) {
+   int i, current_time = 0;
+   for(i = 0; i < n; i++) 
+   {
+      int next_process = highestPriorityProcess(proc, n);
+      printf("Process with highest priority: %d\n", proc[next_process].pid);
+      current_time += proc[next_process].bt;
+      proc[next_process].bt = 0;
+      proc[next_process].priority = -1;
+   }
+   printf("Total execution time: %d\n", current_time);
+}
+int main() 
+{
+   struct Process proc[] = {{1, 10, 2}, {2, 5, 0}, {3, 8, 1}};
+   int n = sizeof proc / sizeof proc[0];
+   preEmptivePriorityScheduling(proc, n);
+   return 0;
+}
