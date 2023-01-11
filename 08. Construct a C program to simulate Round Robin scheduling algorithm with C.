@@ -1,0 +1,58 @@
+#include <stdio.h>
+#define MAX_PROCESSES 10
+#define MAX_QUANTUM 20
+struct Process {
+    int pid;
+    int burstTime;
+    int remainingTime;
+};
+int main() 
+{
+    struct Process processes[MAX_PROCESSES];
+    int n;
+    int quantum;
+    int totalWaitingTime = 0;
+    int totalTurnaroundTime = 0;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+    printf("Enter the burst time of each process:\n");
+    for (int i = 0; i < n; i++) 
+    {
+        processes[i].pid = i + 1;
+        scanf("%d", &processes[i].burstTime);
+        processes[i].remainingTime = processes[i].burstTime;
+    }
+    printf("Enter the time quantum: ");
+    scanf("%d", &quantum);
+    int time = 0;
+    int currentProcess = 0;
+    while (currentProcess < n) 
+    {
+        if (processes[currentProcess].remainingTime > 0) 
+        {
+            int executionTime = quantum;
+            if (executionTime > processes[currentProcess].remainingTime) 
+            {
+                executionTime = processes[currentProcess].remainingTime;
+            }
+            processes[currentProcess].remainingTime -= executionTime;
+            time += executionTime;
+            if (processes[currentProcess].remainingTime == 0) 
+            {
+                int waitingTime = time - processes[currentProcess].burstTime;
+                int turnaroundTime = time;
+                totalWaitingTime += waitingTime;
+                totalTurnaroundTime += turnaroundTime;
+                printf("Process %d completed. Waiting time: %d, Turnaround time: %d\n",
+                       processes[currentProcess].pid, waitingTime, turnaroundTime);
+                currentProcess++;
+            }
+        } else 
+        {
+            currentProcess++;
+        }
+    }
+    printf("\nAverage Waiting Time: %f\n", (float)totalWaitingTime / n);
+    printf("Average Turnaround Time: %f\n", (float)totalTurnaroundTime / n);
+    return 0;
+}
