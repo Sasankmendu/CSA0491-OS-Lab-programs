@@ -1,0 +1,52 @@
+#include <stdio.h>
+#define MAX_PROCESSES 10
+struct Process 
+{
+    int pid;
+    int burstTime;
+};
+void sortByBurstTime(struct Process processes[], int n) 
+{
+    for (int i = 0; i < n - 1; i++) 
+    {
+        for (int j = 0; j < n - i - 1; j++) 
+        {
+            if (processes[j].burstTime > processes[j + 1].burstTime) {
+                struct Process temp = processes[j];
+                processes[j] = processes[j + 1];
+                processes[j + 1] = temp;
+            }
+        }
+    }
+}
+int main() {
+    struct Process processes[MAX_PROCESSES];
+    int n;
+    int totalBurstTime = 0;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+    printf("Enter the burst time of each process:\n");
+    for (int i = 0; i < n; i++) {
+        processes[i].pid = i + 1;
+        scanf("%d", &processes[i].burstTime);
+        totalBurstTime += processes[i].burstTime;
+    }
+    sortByBurstTime(processes, n);
+    printf("\nGantt Chart:\n");
+    for (int i = 0; i < n; i++) 
+    {
+        printf("| ");
+        for (int j = 0; j < processes[i].burstTime; j++) 
+        {
+            printf("P%d ", processes[i].pid);
+        }
+    }
+    printf("|\n");
+    int waitingTime = 0;
+    for (int i = 0; i < n; i++) 
+    {
+        waitingTime += totalBurstTime - processes[i].burstTime;
+    }
+    printf("\nAverage Waiting Time: %f\n", (float)waitingTime / n);
+    return 0;
+}
