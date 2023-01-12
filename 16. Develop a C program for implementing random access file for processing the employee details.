@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct employee 
+{
+    int id;
+    char name[50];
+    int age;
+    float salary;
+};
+void writeEmployee(struct employee emp, FILE *fp) 
+{
+    fseek(fp, emp.id * sizeof(struct employee), SEEK_SET);
+    fwrite(&emp, sizeof(struct employee), 1, fp);
+}
+struct employee readEmployee(int id, FILE *fp) 
+{
+    struct employee emp;
+    fseek(fp, id * sizeof(struct employee), SEEK_SET);
+    fread(&emp, sizeof(struct employee), 1, fp);
+    return emp;
+}
+int main() 
+{
+    FILE *fp;
+    struct employee emp;
+    int id;
+    fp = fopen("employees.dat", "w+b");
+    emp.id = 0;
+    strcpy(emp.name, "John Doe");
+    emp.age = 30;
+    emp.salary = 50000;
+    writeEmployee(emp, fp);
+    emp.id = 1;
+    strcpy(emp.name, "Jane Smith");
+    emp.age = 25;
+    emp.salary = 40000;
+    writeEmployee(emp, fp);
+    emp.id = 2;
+    strcpy(emp.name, "Bob Johnson");
+    emp.age = 35;
+    emp.salary = 60000;
+    writeEmployee(emp, fp);
+    printf("Enter employee ID to read: ");
+    scanf("%d", &id);
+    emp = readEmployee(id, fp);
+    printf("ID: %d\n", emp.id);
+    printf("Name: %s\n", emp.name);
+    printf("Age: %d\n", emp.age);
+    printf("Salary: %f\n", emp.salary);
+    fclose(fp);
+    return 0;
+}
