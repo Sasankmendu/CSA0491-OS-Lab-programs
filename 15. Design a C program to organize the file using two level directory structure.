@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <sys/stat.h>
+int main(int argc, char *argv[]) 
+{
+    char filePath[100];
+    char dir1[100], dir2[100];
+    char newFilePath[100];
+    printf("Enter file path: ");
+    scanf("%s", filePath);
+    printf("Enter first level directory name: ");
+    scanf("%s", dir1);
+    printf("Enter second level directory name: ");
+    scanf("%s", dir2);
+    mkdir(dir1, 0777);
+    strcpy(newFilePath, dir1);
+    strcat(newFilePath, "/");
+    strcat(newFilePath, dir2);
+    mkdir(newFilePath, 0777);
+    strcat(newFilePath, "/");
+    strcat(newFilePath, filePath);
+    rename(filePath, newFilePath);
+    printf("File organized successfully!\n");
+    return 0;
+}
